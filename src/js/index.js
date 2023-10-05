@@ -6,23 +6,25 @@ document.addEventListener("DOMContentLoaded", function () {
   const loaderElement = document.querySelector(".loader");
   const errorElement = document.querySelector(".error");
 
- 
-  loaderElement.style.display = "block";
-  errorElement.style.display = "none";
 
   fetchBreeds()
     .then((breeds) => {
       populateBreedsSelect(breeds);
+      selectElement.classList.remove('is-hidden')
      
-      loaderElement.style.display = "none";
+      
     })
     .catch((error) => {
       showError(error);
+    errorElement.classList.remove('is-hidden')
     
-      loaderElement.style.display = "none";
-      errorElement.style.display = "block";
+    })
+    .finally(() => {
+    element.classList.add('is-hidden')
+        ;
+  
     });
-});
+})
 
 function populateBreedsSelect(breeds) {
   const selectElement = document.querySelector(".breed-select");
