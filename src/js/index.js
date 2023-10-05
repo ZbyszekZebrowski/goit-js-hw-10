@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     })
     .finally(() => {
-    element.classList.add('is-hidden')
+    loaderElement.classList.add('is-hidden')
         ;
   
     });
