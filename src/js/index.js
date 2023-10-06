@@ -1,28 +1,30 @@
 import { fetchBreeds, fetchCatByBreed } from './catapi.js';
 
+let errorCount = 0; 
+
 document.addEventListener("DOMContentLoaded", function () {
   const selectElement = document.querySelector(".breed-select");
   selectElement.addEventListener("change", onCatBreedsElChange);
   const loaderElement = document.querySelector(".loader");
   const errorElement = document.querySelector(".error");
 
-
   fetchBreeds()
     .then((breeds) => {
       populateBreedsSelect(breeds);
-      selectElement.classList.remove('is-hidden')
-     
-      
+      selectElement.classList.remove('is-hidden');
     })
     .catch((error) => {
       showError(error);
-    errorElement.classList.remove('is-hidden')
-    
+
+      if (errorCount === 1) {
+       
+        errorElement.textContent = "Oops! Something went wrong for the first time!";
+      }
+
+      errorElement.classList.remove('is-hidden');
     })
     .finally(() => {
-    loaderElement.classList.add('is-hidden')
-        ;
-  
+      loaderElement.classList.add('is-hidden');
     });
 })
 
@@ -43,22 +45,22 @@ function onCatBreedsElChange() {
   const loaderElement = document.querySelector(".loader");
   const errorElement = document.querySelector(".error");
 
-  
   loaderElement.style.display = "block";
   errorElement.style.display = "none";
 
   fetchCatByBreed(selectedBreedId)
     .then((cats) => {
-      loaderElement.classList.remove("is-hidden")
+      loaderElement.classList.remove("is-hidden");
       displayCatInfo(cats[0]);
-     
-      
     })
     .catch((error) => {
       showError(error);
 
-      errorElement.classList.remove("is-hidden")
-     
+      if (errorCount === 2) {
+        errorElement.textContent = "Oops! Something went wrong for the second time!"; 
+      }
+
+      errorElement.classList.remove("is-hidden");
       loaderElement.style.display = "none";
       errorElement.style.display = "block";
     });
@@ -87,6 +89,17 @@ function displayCatInfo(cat) {
 
 function showError(error) {
   const errorElement = document.querySelector(".error");
-  errorElement.textContent = "Oops! Something went wrong! Try reloading the page!";
+  errorCount++;
+
+  if (errorCount === 2) {
+   
+    errorElement.textContent = "Oops! Something went wrong for the second time!"; 
+  } else if (errorCount === 1) {
+   
+    errorElement.textContent = "Oops! Something went wrong for the first time!"; 
+  } else {
+    errorElement.textContent = "Oops! Something went wrong! Try reloading the page!";
+  }
+
   console.error("Error:", error);
 }
