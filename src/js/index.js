@@ -49,12 +49,15 @@ function onCatBreedsElChange() {
 
   fetchCatByBreed(selectedBreedId)
     .then((cats) => {
+      loaderElement.classList.remove("is-hidden")
       displayCatInfo(cats[0]);
      
-      loaderElement.style.display = "none";
+      
     })
     .catch((error) => {
       showError(error);
+
+      errorElement.classList.remove("is-hidden")
      
       loaderElement.style.display = "none";
       errorElement.style.display = "block";
